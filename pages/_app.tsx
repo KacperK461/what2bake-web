@@ -1,6 +1,8 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { Lato } from '@next/font/google';
+import Header from '@/components/Header';
+import { ThemeProvider } from 'next-themes';
 
 const lato = Lato({
   weight: ['400', '700', '900'],
@@ -10,8 +12,13 @@ const lato = Lato({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main className={`${lato.variable} font-sans`}>
-      <Component {...pageProps} />
-    </main>
+    <ThemeProvider attribute='class'>
+      <div className={`${lato.variable} bg-white font-sans dark:bg-dark-600`}>
+        <Header />
+        <main>
+          <Component {...pageProps} />
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
