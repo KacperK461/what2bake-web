@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
+import SearchIcon from '@/public/svg/search-icon.svg';
 
 const Header = () => {
   const { theme } = useTheme();
@@ -12,11 +13,13 @@ const Header = () => {
         <div className='h-12 w-12 rounded-full border-2 border-gray-600'></div>
       </div>
       <div className='flex min-w-full rounded-2xl bg-white px-6 py-3 shadow-lg  dark:bg-dark-200'>
-        <Image src='/images/search-icon.svg' width={27.5} height={27.5} alt='Search icon' className='mr-2' />
+        {/* <Image src='/svg/search-icon.svg' width={27.5} height={27.5} alt='Search icon' className='mr-2' />
+         */}
+        <SearchIcon className='text-3xl' />
         <input
           type='text'
           placeholder='Wprowadź słowa kluczowe'
-          className='w-full bg-transparent placeholder-light-500'
+          className='ml-2 w-full bg-transparent placeholder-light-500'
         />
       </div>
     </header>

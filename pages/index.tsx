@@ -8,7 +8,7 @@ export default function Home() {
     <Layout>
       <h1>asdasd</h1>
       <button
-        className='fixed bottom-0 cursor-pointer bg-gray-100'
+        className='fixed bottom-36 cursor-pointer bg-gray-100'
         onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
         toggle theme
       </button>
