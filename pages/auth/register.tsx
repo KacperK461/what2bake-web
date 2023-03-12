@@ -1,4 +1,5 @@
-import { initPocketbase, serializeNonPOJOs } from '@/utils/pocketbaseHelpers';
+import useUser from '@/hooks/useUser';
+import { initPocketbase, serializeNonPOJOs } from '@/lib/pocketbase';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -21,43 +22,40 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 };
 
 const Register = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState<any>(null);
-
   const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
-    const response = await fetch('../api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    });
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData.entries())),
+      });
 
-    if (response.ok) router.push('/');
-    else {
-      const data = await response.json();
-      setError(data?.message);
+      if (response.ok) router.push('/');
+      else {
+        const data = await response.json();
+        setError(data?.message);
+      }
+    } catch (_) {
+      setError('Coś poszło nie tak. Spróbuj ponownie później.');
     }
   };
 
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input type='text' name='name' value={name} onChange={(event) => setName(event.target.value)} />
+        <input type='text' name='name' />
         {error?.fieldErrors?.name?.[0]}
-        <input type='email' name='email' value={email} onChange={(event) => setEmail(event.target.value)} />
+        <input type='email' name='email' />
         {error?.fieldErrors?.email?.[0]}
-        <input type='password' name='password' value={password} onChange={(event) => setPassword(event.target.value)} />
+        <input type='password' name='password' />
         {error?.fieldErrors?.password?.[0]}
         {typeof error === 'string' && error}
         <button type='submit'>submit</button>

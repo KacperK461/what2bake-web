@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { initPocketbase } from '@/utils/pocketbaseHelpers';
+import { initPocketbase } from '@/lib/pocketbase';
 
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'DELETE') return res.status(405).send({ message: 'Only DELETE requests allowed.' });

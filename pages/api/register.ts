@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { initPocketbase } from '@/utils/pocketbaseHelpers';
+import { initPocketbase } from '@/lib/pocketbase';
 import { z } from 'zod';
 
 const registerSchema = z.object({

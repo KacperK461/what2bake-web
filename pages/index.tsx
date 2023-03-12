@@ -1,8 +1,14 @@
 import { useTheme } from 'next-themes';
 import Layout from '@/components/Layout';
+import useUser from '@/hooks/useUser';
 
 export default function Home() {
   const { theme, setTheme } = useTheme();
+
+  const { user, isLogged, isAdmin } = useUser();
+  console.log(user);
+  console.log(isLogged);
+  console.log(isAdmin);
 
   return (
     <Layout>
