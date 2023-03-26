@@ -5,6 +5,12 @@ import { useState } from 'react';
 import { FormEvent } from 'react';
 import { AuthProviderInfo } from 'pocketbase';
 import AuthLayout from '@/components/AuthLayout';
+import Form from '@/components/Form';
+import Button from '@/components/Button';
+import Link from 'next/link';
+import FacebookIcon from '@/public/icons/facebook-icon.svg';
+import GoogleIcon from '@/public/icons/google-icon.svg';
+import TwitterIcon from '@/public/icons/twitter-icon.svg';
 import useUser from '@/hooks/useUser';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
@@ -29,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 const Login = ({ authProviders }: { authProviders: AuthProviderInfo[] }) => {
   const [error, setError] = useState<any>(null);
   const router = useRouter();
+  const { mutate } = useUser();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -43,8 +50,11 @@ const Login = ({ authProviders }: { authProviders: AuthProviderInfo[] }) => {
         body: JSON.stringify(Object.fromEntries(formData.entries())),
       });
 
-      if (response.ok) router.push('/');
-      else {
+      if (response.ok) {
+        const user = await mutate();
+        if (user?.roles?.includes('ROLE_ADMIN')) router.push('/admin/dashboard');
+        else router.push('/');
+      } else {
         const data = await response.json();
         setError(data?.message);
       }
@@ -64,19 +74,48 @@ const Login = ({ authProviders }: { authProviders: AuthProviderInfo[] }) => {
 
   return (
     <AuthLayout>
-      <form onSubmit={handleSubmit} className='h-[60vh]'>
-        <input type='email' name='email' />
-        {error?.fieldErrors?.email?.[0]}
-        <input type='password' name='password' />
-        {error?.fieldErrors?.password?.[0]}
-        {typeof error === 'string' && error}
-        <button type='submit'>submit</button>
-        {authProviders.map((provider) => (
-          <button onClick={() => handleOAuth(provider)} key={provider.name}>
-            {provider.name}
-          </button>
-        ))}
-      </form>
+      <h1 className='text-2xl font-bold'>Zaloguj się</h1>
+      <Form onSubmit={handleSubmit} error={error}>
+        <Form.Input type='email' name='email' placeholder='Email' />
+        <Form.Input type='password' name='password' placeholder='Hasło' />
+        <Form.GeneralError />
+        <Button type='submit' color='yellow'>
+          Zaloguj się
+        </Button>
+      </Form>
+
+      <p className='mt-7 text-center text-xs'>
+        Przez zalogowanie się akceptujesz <br />
+        naszą{' '}
+        <Link href='#' className='text-yellow'>
+          Politykę prywatności
+        </Link>
+      </p>
+
+      {/* {authProviders.map((provider) => (
+        <button onClick={() => handleOAuth(provider)} key={provider.name}>
+          {provider.name}
+        </button>
+      ))} */}
+
+      <div className='my-10 flex justify-around'>
+        <button>
+          <FacebookIcon className='text-5xl' />
+        </button>
+        <button>
+          <GoogleIcon className='text-5xl' />
+        </button>
+        <button>
+          <TwitterIcon className='text-5xl' />
+        </button>
+      </div>
+
+      <p className='mt-16 mb-4 text-center'>
+        Nie masz konta?{' '}
+        <Link href='/auth/register' className='text-yellow'>
+          Zarejestruj się!
+        </Link>
+      </p>
     </AuthLayout>
   );
 };

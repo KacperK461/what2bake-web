@@ -8,12 +8,15 @@ const loginSchema = z.object({
     .trim()
     .min(1, { message: 'Email jest wymagany.' })
     .email({ message: 'Nieprawidłowy email.' }),
-  password: z.string({ required_error: 'Hasło jest wymagane.' }).trim().min(1, { message: 'Hasło jest wymagane.' }),
+  password: z
+    .string({ required_error: 'Hasło jest wymagane.' })
+    .trim()
+    .min(1, { message: 'Hasło jest wymagane.' }),
 });
 
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== 'POST') return res.status(405).send({ message: 'Only POST requests allowed.' });
-  console.log(req.body);
+  if (req.method !== 'POST')
+    return res.status(405).send({ message: 'Only POST requests allowed.' });
 
   const loginData = loginSchema.safeParse(req.body);
   if (!loginData.success) return res.status(400).send({ message: loginData.error.flatten() });

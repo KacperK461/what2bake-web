@@ -20,6 +20,9 @@ module.exports = {
         'hero-pattern-light':
           'linear-gradient(0deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.94)), url(/images/hero-image.png)',
       },
+      screens: {
+        tall: { raw: '(min-height: 810px)' },
+      },
     },
     colors: {
       transparent: 'transparent',
@@ -59,8 +62,9 @@ module.exports = {
         100: '#03B815',
         200: '#A0CC14',
         300: '#607C08',
-        400: '789A0D',
+        400: '#789A0D',
       },
+      red: '#ff0000',
     },
   },
   corePlugins: {
