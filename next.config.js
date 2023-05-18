@@ -9,6 +9,9 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    domains: ['static.mojewypieki.com'],
+  },
 };
 
 module.exports = nextConfig;

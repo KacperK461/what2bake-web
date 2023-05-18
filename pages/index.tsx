@@ -1,10 +1,8 @@
-import { useTheme } from 'next-themes';
 import Layout from '@/components/Layout';
+import RecipeList from '@/components/RecipeList';
 import useUser from '@/hooks/useUser';
 
 export default function Home() {
-  const { theme, setTheme } = useTheme();
-
   const { user, isLogged, isAdmin } = useUser();
   console.log(user);
   console.log(isLogged);
@@ -12,12 +10,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <h1>asdasd</h1>
-      <button
-        className='fixed bottom-36 cursor-pointer bg-gray-100'
-        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-        toggle theme
-      </button>
+      <RecipeList></RecipeList>
     </Layout>
   );
 }

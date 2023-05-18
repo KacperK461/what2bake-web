@@ -1,8 +1,10 @@
 import Router from 'next/router';
 
-export const fetcher = async (url: string, options?: RequestInit) => {
-  const response = await fetch(url, options);
+export const fetcher = async ([url, options]: [url: string, options?: RequestInit]) => {
+  console.log(options);
 
+  const response = await fetch(url, options);
+  console.log(await response.json());
   if (response.status === 401) {
     Router.push('/auth/login');
     throw new Error('User is not authenticated.');
@@ -20,10 +22,13 @@ export const fetcher = async (url: string, options?: RequestInit) => {
 };
 
 export const postFetcher = async (url: string, body: any) =>
-  fetcher(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  fetcher([
+    url,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
     },
-    body: JSON.stringify(body),
-  });
+  ]);
